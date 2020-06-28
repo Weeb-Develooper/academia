@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark v-resize="method1">
+    <v-app-bar app color="primary" v-resize="method1">
       <v-app-bar-nav-icon
         @click="drawer = true"
         color="teal"
@@ -9,43 +9,80 @@
 
       <!-- Nav Drawer -->
       <v-navigation-drawer app v-model="drawer" absolute temporary>
-        <v-list nav dense>
+        <v-subheader>PAGES</v-subheader>
+        <v-list nav dense shaped>
           <v-list-item-group
             v-model="group"
-            active-class="deep-purple--text text--accent-4"
+            active-class="cyan--text text--accent-4"
           >
-            <v-list-item v-for="list in lists" :key="list">
-              <v-list-item-title>{{ list }}</v-list-item-title>
+            <v-list-item :to="list.to" v-for="list in lists" :key="list">
+              <v-list-item-title>{{ list.name }}</v-list-item-title>
             </v-list-item>
           </v-list-item-group>
         </v-list>
+        <v-divider></v-divider>
+        <v-list dense>
+          <v-list-item>
+            <v-list-item-title>Login</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Sign Up</v-list-item-title>
+          </v-list-item>
+        </v-list>
       </v-navigation-drawer>
 
+      <v-img
+        :src="require('@/assets/academia.png')"
+        class="px-2"
+        max-height="40"
+        max-width="40"
+        contain
+        v-show="menu == false"
+      ></v-img>
       <div :class="`${tClass}`">
         <v-toolbar-title>Academia</v-toolbar-title>
       </div>
+      <v-btn
+        text
+        small
+        class="link text-capitalize font-weight-light px-2 mx-1 text--text"
+        v-for="list in lists"
+        :key="list"
+        v-show="menu == false"
+        :to="list.to"
+        >{{ list.name }}</v-btn
+      >
 
       <v-spacer v-show="menu == false"></v-spacer>
 
       <div class="text-center" v-show="menu == false">
-        <span class="ma-2" v-for="list in lists" :key="list">{{ list }}</span>
-        <v-btn small class="ma-2" tile outlined color="secondary">
+        <v-btn
+          small
+          class="ma-2 text-capitalize"
+          tile
+          depressed
+          color="orange accent-3"
+          dark
+          >Sign Up</v-btn
+        >
+        <v-btn
+          small
+          class="ma-2 text-capitalize"
+          tile
+          outlined
+          color="secondary"
+        >
           Login
-        </v-btn>
-        <v-btn small class="ma-2" tile color="teal" dark>Sign Up</v-btn>
-        <v-btn small class="ma-2" tile large color="teal" icon>
-          <v-icon>mdi-magnify</v-icon>
         </v-btn>
       </div>
 
-      <v-btn small tile large color="teal" icon v-show="menu == true">
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      <v-avatar v-show="menu == true">
+        <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+      </v-avatar>
     </v-app-bar>
 
     <v-main>
       <v-container fluid>
-        <!-- If using vue-router -->
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -61,10 +98,27 @@ export default {
     drawer: false,
     group: null,
     tClass: "",
-    lists: ["Home", "School", "Courses", "About"],
+    lists: [
+      {
+        to: "/",
+        name: "Home",
+      },
+      {
+        to: "",
+        name: "Instructors",
+      },
+      {
+        to: "",
+        name: "Courses",
+      },
+      {
+        to: "/about",
+        name: "About",
+      },
+    ],
   }),
   mounted: function() {
-    this.autoTheme(); //autoTheme will execute at pageload
+    //this.autoTheme(); //autoTheme will execute at pageload
     this.method1(); //method1 will execute at pageload
   },
   methods: {
@@ -109,3 +163,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.link {
+  text-decoration-line: none;
+}
+</style>
