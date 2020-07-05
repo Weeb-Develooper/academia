@@ -49,7 +49,7 @@
         v-for="list in lists"
         :key="list"
         v-show="menu == false"
-        :to="list.to"
+        :href="list.to"
         >{{ list.name }}</v-btn
       >
 
