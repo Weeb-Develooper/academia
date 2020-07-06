@@ -32,14 +32,14 @@
       </v-navigation-drawer>
 
       <v-img
-        :src="require('@/assets/academia.png')"
+        src="@/assets/academia.png"
         class="px-2"
         max-height="40"
         max-width="40"
         contain
         v-show="menu == false"
       ></v-img>
-      <div :class="`${tClass}`">
+      <div :class="`${tClass} me`">
         <v-toolbar-title>Academia</v-toolbar-title>
       </div>
       <v-btn
@@ -60,31 +60,39 @@
           small
           class="ma-2 text-capitalize"
           tile
-          depressed
-          color="orange accent-3"
-          dark
-          >Sign Up</v-btn
-        >
-        <v-btn
-          small
-          class="ma-2 text-capitalize"
-          tile
           outlined
           color="secondary"
         >
           Login
         </v-btn>
+        <v-btn
+          small
+          class="ma-2 text-capitalize"
+          tile
+          depressed
+          color="blue accent-3"
+          dark
+          >Sign Up</v-btn
+        >
       </div>
 
-      <v-avatar v-show="menu == true">
-        <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
-      </v-avatar>
+      <v-badge
+        bordered
+        :content="messages"
+        :value="messages"
+        color="error"
+        left
+        overlap
+        v-show="menu == true"
+      >
+        <v-btn small color="teal" icon>
+          <v-icon> mdi-bell</v-icon>
+        </v-btn>
+      </v-badge>
     </v-app-bar>
 
     <v-main>
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
@@ -97,6 +105,7 @@ export default {
     menu: null,
     drawer: false,
     group: null,
+    messages: 2,
     tClass: "",
     lists: [
       {
@@ -167,5 +176,8 @@ export default {
 <style scoped>
 .link {
   text-decoration-line: none;
+}
+.me {
+  font-family: "Fondamento", cursive;
 }
 </style>
