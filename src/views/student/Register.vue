@@ -1,67 +1,108 @@
 <template>
-  <v-container fluid>
-    <v-row class="fill-height d-flex flex-row justify-center align-center mx-1">
-      <v-col cols="12" lg="5" md="9" sm="10" class="text-center mx-auto">
-        <v-form v-model="valid">
-          <v-avatar size="150">
-            <img src="@/assets/nerd-amico.png" alt="user" />
-          </v-avatar>
-          <h2 class="text-subtitle my-5">Join Academia</h2>
-          <v-text-field
-            :rules="[rules.required]"
-            color="text"
-            label="First Name"
-          />
-          <v-text-field
-            :rules="[rules.required]"
-            color="text"
-            label="Last Name"
-          />
-          <v-select
-            v-model="select"
-            :hint="`${select.state}, ${select.abbr}`"
-            :items="items"
-            item-text="state"
-            item-color="text"
-            color="text"
-            item-value="state"
-            label="Select"
-            persistent-hint
-            return-object
-            single-line
-          ></v-select>
-          <v-text-field
-            :rules="[rules.required, rules.reg, rules.max]"
-            color="text"
-            counter="11"
-            label="Matric Number"
-          />
-          <v-text-field
-            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="show1 ? 'text' : 'password'"
-            :rules="[rules.required, rules.min]"
-            color="text"
-            counter="10"
-            label="Password"
-            @click:append="show1 = !show1"
-          />
-          <v-row class="d-flex my-5 flex-row justify-center align-center mx-5">
-            <v-col cols="12" md="7">
-              <v-btn depressed block color="cyan darken-3" class="my-3" dark
-                >Register</v-btn
-              >
-              <span class="text-subtitle-1">
-                Already have an account? Login
-              </span>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div>
+    <div class="text-left" v-show="this.$store.getters.getDevice == true">
+      <v-sheet color="light-blue lighten-5" height="150">
+        <h2 class="text-subtitle px-12 pt-8">
+          Join Academia
+        </h2>
+        <p class="px-12">
+          Get the best as a student from Acedemia. Search faster, learn better.
+        </p>
+      </v-sheet>
+    </div>
+    <v-container fluid>
+      <v-row
+        class="fill-height d-flex flex-row justify-center align-center mx-1"
+      >
+        <v-col cols="12" lg="5" md="9" sm="10" class="text-center mx-auto">
+          <v-form v-model="valid">
+            <v-avatar
+              size="150"
+              v-show="this.$store.getters.getDevice == false"
+            >
+              <img src="@/assets/nerd-amico.png" alt="user" />
+            </v-avatar>
+            <h2
+              class="text-subtitle my-5"
+              v-show="this.$store.getters.getDevice == false"
+            >
+              Join Academia
+            </h2>
+            <v-text-field
+              :rules="[rules.required]"
+              color="text"
+              label="First Name"
+              outlined
+            />
+            <v-text-field
+              :rules="[rules.required]"
+              color="text"
+              label="Last Name"
+              outlined
+            />
+            <v-select
+              v-model="select"
+              :hint="`${select.state}, ${select.abbr}`"
+              :items="items"
+              item-text="state"
+              item-color="text"
+              color="text"
+              item-value="state"
+              label="Select"
+              persistent-hint
+              return-object
+              outlined
+            ></v-select>
+            <v-text-field
+              :rules="[rules.required, rules.reg, rules.max]"
+              color="text"
+              counter="11"
+              label="Matric Number"
+              outlined
+            />
+            <v-text-field
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show1 ? 'text' : 'password'"
+              :rules="[rules.required, rules.min]"
+              color="text"
+              counter="10"
+              label="Password"
+              @click:append="show1 = !show1"
+              outlined
+            />
+            <v-text-field
+              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show2 ? 'text' : 'password'"
+              :rules="[rules.required, rules.min]"
+              color="text"
+              counter="10"
+              label="Confrim Password"
+              @click:append="show2 = !show2"
+              outlined
+            />
+            <v-row
+              class="d-flex mt-5 flex-row justify-center align-center mx-5"
+            >
+              <v-col cols="12" md="7">
+                <v-btn depressed block color="cyan darken-3" dark
+                  >Register</v-btn
+                >
+              </v-col>
+            </v-row>
+            <span class="text-subtitle-1">
+              Already have an account?
+              <a class="cyan--text darken-3" href="/student/login">Login</a>
+            </span>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "Register",
 
@@ -69,6 +110,7 @@ export default {
     return {
       valid: false,
       show1: false,
+      show2: false,
       select: { state: "Department", abbr: "School" },
       items: [
         { state: "Computer Science", abbr: "SCIT" },
@@ -92,6 +134,9 @@ export default {
           isNaN(val) == false || "Matric number should have only digits!",
       },
     };
+  },
+  methods: {
+    ...mapState("device"),
   },
 };
 </script>

@@ -12,6 +12,7 @@
             color="text"
             counter="11"
             label="Matric Number"
+            outlined
           />
           <v-text-field
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -21,18 +22,20 @@
             counter="10"
             label="Password"
             @click:append="show1 = !show1"
+            outlined
           />
-          <span class="text-caption float-left">Forgot password?</span>
-          <v-row class="d-flex my-5 flex-row justify-center align-center mx-5">
+          <span class="text-caption float-left red--text darken-3 mt-n5"
+            >Forgot password?</span
+          >
+          <v-row class="d-flex mt-5 flex-row justify-center align-center mx-5">
             <v-col cols="12" md="7">
-              <v-btn depressed block color="cyan darken-3" class="my-3" dark
-                >Login</v-btn
-              >
-              <span class="text-subtitle-1">
-                Don't have an account? Sign up
-              </span>
+              <v-btn depressed block color="cyan darken-3" dark>Login</v-btn>
             </v-col>
           </v-row>
+          <span class="text-subtitle-1">
+            Don't have an account?
+            <a class="cyan--text darken-3" href="/student/register">Sign up</a>
+          </span>
         </v-form>
       </v-col>
     </v-row>
@@ -63,3 +66,9 @@ export default {
   },
 };
 </script>
+
+<style>
+a {
+  text-decoration-line: none;
+}
+</style>

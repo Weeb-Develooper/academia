@@ -53,7 +53,7 @@
         contain
         v-show="menu == false"
       ></v-img>
-      <div :class="`${tClass} me`">
+      <div :class="`${tClass}`">
         <v-toolbar-title>Academia</v-toolbar-title>
       </div>
       <v-btn
@@ -209,8 +209,5 @@ export default {
 <style scoped>
 .link {
   text-decoration-line: none;
-}
-.me {
-  font-family: "Fondamento", cursive;
 }
 </style>
