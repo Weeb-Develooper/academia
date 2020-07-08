@@ -48,7 +48,7 @@
               item-color="text"
               color="text"
               item-value="state"
-              label="Select"
+              label="Department, School"
               persistent-hint
               return-object
               outlined
