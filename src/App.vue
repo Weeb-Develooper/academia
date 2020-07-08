@@ -5,7 +5,8 @@
         @click="drawer = true"
         color="teal"
         v-show="menu == true"
-      ></v-app-bar-nav-icon>
+      >
+      </v-app-bar-nav-icon>
 
       <!-- Nav Drawer -->
       <v-navigation-drawer app v-model="drawer" absolute temporary>
@@ -22,12 +23,25 @@
         </v-list>
         <v-divider></v-divider>
         <v-list dense>
-          <v-list-item>
-            <v-list-item-title>Login</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>Sign Up</v-list-item-title>
-          </v-list-item>
+          <v-list-group
+            v-for="item in items"
+            :key="item.title"
+            v-model="item.active"
+            active-class="cyan--text"
+          >
+            <template v-slot:activator>
+              <v-list-item-title v-text="item.title"></v-list-item-title>
+            </template>
+
+            <v-list-item
+              v-for="subItem in item.items"
+              :key="subItem.title"
+              :to="subItem.to"
+              active-class="cyan--text text--accent-4"
+            >
+              <v-list-item-title v-text="subItem.title"></v-list-item-title>
+            </v-list-item>
+          </v-list-group>
         </v-list>
       </v-navigation-drawer>
 
@@ -81,7 +95,6 @@
         :content="messages"
         :value="messages"
         color="error"
-        left
         overlap
         v-show="menu == true"
       >
@@ -98,6 +111,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "App",
 
@@ -105,8 +120,23 @@ export default {
     menu: null,
     drawer: false,
     group: null,
-    messages: 2,
+    messages: 3,
     tClass: "",
+    items: [
+      {
+        title: "Student",
+        active: false,
+        items: [
+          { title: "Login", to: "/student/login" },
+          { title: "Sign Up", to: "/student/register" },
+        ],
+      },
+      {
+        title: "Lecturer",
+        active: false,
+        items: [{ title: "Login" }, { title: "Sign Up" }],
+      },
+    ],
     lists: [
       {
         to: "/",
@@ -128,7 +158,7 @@ export default {
   }),
   mounted: function() {
     //this.autoTheme(); //autoTheme will execute at pageload
-    this.method1(); //method1 will execute at pageload
+    //this.method1(); //method1 will execute at pageload
   },
   methods: {
     //changes theme manually
@@ -159,11 +189,14 @@ export default {
       if (isMobile) {
         this.menu = true;
         this.tClass = "mx-auto";
+        this.$store.dispatch("device", this.menu);
       } else {
         this.menu = false;
         this.tClass = "d-flex align-center";
+        this.$store.dispatch("device", this.menu);
       }
     },
+    ...mapState("device"),
   },
   watch: {
     group() {

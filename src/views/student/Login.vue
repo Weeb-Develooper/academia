@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid>
+  <v-container fluid v-resize="getMenu">
     <v-row class="fill-height d-flex flex-row justify-center align-center mx-8">
       <v-col cols="12" lg="5" md="5" sm="10" class="text-center mx-auto">
         <v-form v-model="valid">
-          <v-avatar size="150">
-            <img src="../assets/nerd-amico.png" alt="user" />
+          <v-avatar size="150" v-show="getMenu == true">
+            <img src="@/assets/nerd-amico.png" alt="user" />
           </v-avatar>
           <h2 class="text-subtitle my-5">Enter Academia</h2>
           <v-text-field
@@ -55,6 +55,11 @@ export default {
           isNaN(val) == false || "Matric number should have only digits!",
       },
     };
+  },
+  computed: {
+    getMenu() {
+      return this.$store.getters.getDevice;
+    },
   },
 };
 </script>

@@ -12,7 +12,7 @@ export default new Vuetify({
                 text: "#000000",
                 error: "#b71c1c",
                 bground: "#ffffff",
-                btnprim: "#3F51B5",
+                btnprim: "#4093BE",
             },
             dark: {
                 primary: "#1e1e1e",
@@ -20,7 +20,7 @@ export default new Vuetify({
                 text: "#ffffff",
                 error: "#b71c1c",
                 bground: "#e3e3e3",
-                btnprim: "#7986CB",
+                btnprim: "#4093BE",
             },
         },
     },
