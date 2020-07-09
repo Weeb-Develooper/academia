@@ -34,7 +34,7 @@
           </v-row>
           <span class="text-subtitle-1">
             Don't have an account?
-            <router-link class="cyan--text darken-3" :to="/student/register">Sign up</router-link>
+            <router-link class="cyan--text darken-3" to="/student/register">Sign up</router-link>
           </span>
         </v-form>
       </v-col>
