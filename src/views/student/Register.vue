@@ -91,7 +91,7 @@
             </v-row>
             <span class="text-subtitle-1">
               Already have an account?
-              <router-link class="cyan--text darken-3" :to="/student/login">Login</router-link>
+              <router-link class="cyan--text darken-3" to="/student/login">Login</router-link>
             </span>
           </v-form>
         </v-col>
