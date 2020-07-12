@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import error from "../views/error.vue";
 import Login from "../views/student/Login.vue";
 import Register from "../views/student/Register.vue";
 
@@ -30,12 +29,7 @@ const routes = [{
         path: "/student/register",
         name: "Register",
         component: Register,
-    },
-    {
-        path: "*",
-        name: "404",
-        component: error,
-    },
+    }
 ];
 
 const router = new VueRouter({
