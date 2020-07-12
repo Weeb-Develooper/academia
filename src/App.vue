@@ -117,7 +117,6 @@ export default {
   name: "App",
 
   data: () => ({
-    menu: null,
     drawer: false,
     group: null,
     messages: 3,
@@ -157,46 +156,25 @@ export default {
     ],
   }),
   mounted: function() {
-    //this.autoTheme(); //autoTheme will execute at pageload
-    //this.method1(); //method1 will execute at pageload
+    this.method1(); //method1 will execute at pageload
   },
   methods: {
-    //changes theme manually
-    changeState() {
-      if (
-        this.theme == "mdi-white-balance-sunny" &&
-        this.$vuetify.theme.dark == true
-      ) {
-        this.theme = "mdi-moon-waxing-crescent";
-        this.$vuetify.theme.dark = false;
-      } else {
-        this.theme = "mdi-white-balance-sunny";
-        this.$vuetify.theme.dark = true;
-      }
-    },
-    autoTheme() {
-      const hours = new Date().getHours();
-      if (hours <= 6 || hours >= 18) {
-        this.$vuetify.theme.dark = true;
-        this.theme = "mdi-white-balance-sunny";
-      } else {
-        this.$vuetify.theme.dark = false;
-        this.theme = "mdi-moon-waxing-crescent";
-      }
-    },
     method1() {
+      var menu = null;
       var isMobile = /iPhone|iPod|Android/i.test(navigator.userAgent);
       if (isMobile) {
-        this.menu = true;
+        menu = true;
         this.tClass = "mx-auto";
-        this.$store.dispatch("device", this.menu);
+        this.$store.dispatch("device", menu);
       } else {
-        this.menu = false;
+        menu = false;
         this.tClass = "d-flex align-center";
-        this.$store.dispatch("device", this.menu);
+        this.$store.dispatch("device", menu);
       }
     },
-    ...mapState("device"),
+  },
+  computed: {
+    ...mapState(["menu"]),
   },
   watch: {
     group() {
