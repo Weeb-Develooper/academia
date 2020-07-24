@@ -1,48 +1,133 @@
 <template>
-  <v-container>
+  <div>
     <v-row>
-      <v-col cols="12" lg="6" md="6" sm="6">
-        <v-lazy v-model="isActive" transition="scroll-x-transition">
-          <div>
-            <h1 class="display-2 font-weight-bold mt-5">
-              Learn with
-            </h1>
-            <p class="display-4 font-weight-regular cyan--text accent-2">
-              Academia.
-            </p>
-            <p class="text-justify">
-              Take your learning to the next level. Complete courses, take tests
-              and get your scores immediately. Click one of the button below to
-              register as...
-            </p>
-            <v-btn class="text-capitalize" color="blue accent-3" dark>
-              Student
-            </v-btn>
-            <v-btn class="ml-3 text-capitalize" text color="blue accent-3" dark>
-              Lecturer
-            </v-btn>
-          </div>
-        </v-lazy>
-      </v-col>
+      <v-img src="../assets/620955908.jpg" height="350">
+        <v-sheet class="unclear" height="350">
+          <v-row>
+            <v-col cols="12" lg="6" md="6" sm="12" class="mx-auto">
+              <v-container class="text-center">
+                <h1 class="display-2 white--text font-weight-regular mt-5">
+                  Become an
+                </h1>
+                <p class="display-4 font-weight-medium cyan--text accent-4">
+                  Academian
+                </p>
+                <p>
+                  Take your learning to the next level. Complete courses, take
+                  tests and get your scores immediately. Click one of the button
+                  below to register as...
+                </p>
+                <v-btn
+                  class="text-capitalize secondary--text"
+                  color="white"
+                  tile
+                  dark
+                >
+                  Student
+                </v-btn>
+                <v-btn
+                  class="ml-3 text-capitalize secondary--text"
+                  color="orange darken-3"
+                  tile
+                  dark
+                >
+                  Lecturer
+                </v-btn>
+              </v-container>
+            </v-col>
+          </v-row>
+        </v-sheet>
+      </v-img>
+    </v-row>
 
-      <v-col cols="12" lg="6" md="6" sm="6">
+    <v-row style="background-color: rgba(173, 216, 230, 0.5);">
+      <v-col v-show="menu == false" cols="12" lg="7" md="7" sm="7">
         <v-img
-          src="../assets/3777639.jpg"
-          class="my-3 text-center align-center"
+          src="../assets/Asset 1.svg"
+          class="v-img--offset"
+          aspect-ratio="2.3"
           contain
-          >Hahah</v-img
-        >
+        ></v-img>
+      </v-col>
+      <v-col cols="12" lg="5" md="5" sm="5">
+        <div class="my-12 px-2 mx-9">
+          <h2 class="pt-3 text-h3">Best Features</h2>
+          <p class="mt-2 text-subtitle-1">
+            But I must explain to you how all this mistaken idea of denouncing
+            pleasure and praising pain was born and I will give you a complete
+            account of the system, and expound the actual teachings of the great
+            explorer of the truth, the master builder of human happiness. No one
+            rejects, dislikes or avoids.
+          </p>
+        </div>
       </v-col>
     </v-row>
-  </v-container>
+
+    <v-container fluid>
+      <v-row>
+        <v-col v-for="col3 in row3" :key="col3" cols="12" md="4">
+          <v-lazy
+            v-model="isActive"
+            :options="{
+              threshold: 0.5,
+            }"
+            transition="fade-transition"
+          >
+            <v-card class="mx-auto" outlined>
+              <v-img :src="col3.img" height="200" class="white--text align-end">
+                <v-card-title>{{ col3.txt }}</v-card-title>
+              </v-img>
+              <v-card-text class="text--primary">
+                <div>Whitehaven Beach</div>
+
+                <div>Whitsunday Island, Whitsunday Islands</div>
+              </v-card-text>
+            </v-card>
+          </v-lazy>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "HelloWorld",
 
   data: () => ({
     isActive: false,
+    row3: [
+      {
+        img:
+          "https://unsplash.com/photos/MAGAXAYq_NE/download?force=true&w=1920",
+        txt: "Read Online",
+      },
+      {
+        img:
+          "https://unsplash.com/photos/-2vD8lIhdnw/download?force=true&w=1920",
+        txt: "Online Lectures",
+      },
+      {
+        img:
+          "https://unsplash.com/photos/2FPjlAyMQTA/download?force=true&w=1920",
+        txt: "Community",
+      },
+    ],
   }),
+  computed: {
+    ...mapState(["menu"]),
+  },
 };
 </script>
+
+<style scoped>
+.unclear {
+  background-color: rgba(37, 37, 139, 0.644);
+}
+
+.v-img--offset {
+  bottom: -36px;
+  position: relative;
+}
+</style>
