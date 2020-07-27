@@ -63,9 +63,9 @@
       </v-col>
     </v-row>
 
-    <v-container fluid>
+    <v-container>
       <v-row>
-        <v-col v-for="col3 in row3" :key="col3" cols="12" md="4">
+        <v-col v-for="col3 in row3" :key="col3" cols="12" md="4" class="mt-2">
           <v-lazy
             v-model="isActive"
             :options="{
@@ -78,15 +78,54 @@
                 <v-card-title>{{ col3.txt }}</v-card-title>
               </v-img>
               <v-card-text class="text--primary">
-                <div>Whitehaven Beach</div>
+                <!-- <div>Whitehaven Beach</div> -->
 
-                <div>Whitsunday Island, Whitsunday Islands</div>
+                <div>
+                  But I must explain to you how all this mistaken idea of
+                  denouncing pleasure and praising pain was born and I will give
+                  you a complete account of the system,
+                </div>
               </v-card-text>
             </v-card>
           </v-lazy>
         </v-col>
       </v-row>
     </v-container>
+
+    <v-row>
+      <v-sheet color="blue darken-3" width="100%">
+        <v-col cols="12" lg="6" md="6" sm="6" class="mx-auto">
+          <div class="text-center white--text">
+            <div class="text-h4 transition-swing mt-12">
+              Search a Department
+            </div>
+            <div class="text-subtitle-1 transition-swing my-2 mx-2">
+              Enroll today in any course of your choice and get above your
+              peers. Better yourself today and help your career. Better yourself
+              with Academia.
+            </div>
+            <div class="mx auto mx-8 mt-6 mb-12">
+              <v-text-field
+                label="Search Department"
+                append-icon="mdi-magnify"
+                background-color="white"
+                color="grey"
+                single-line
+                outlined
+              ></v-text-field>
+            </div>
+          </div>
+        </v-col>
+      </v-sheet>
+    </v-row>
+
+    <v-footer app class="pa-0">
+      <v-card flat tile width="100%" class="blue-grey darken-4">
+        <v-card-text class="text-center white--text">
+          Academia {{ new Date().getFullYear() }}
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </div>
 </template>
 
@@ -123,7 +162,7 @@ export default {
 
 <style scoped>
 .unclear {
-  background-color: rgba(37, 37, 139, 0.644);
+  background-color: rgba(37, 37, 139, 0.45);
 }
 
 .v-img--offset {
