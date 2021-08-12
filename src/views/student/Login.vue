@@ -1,9 +1,9 @@
 <template>
-  <v-container fluid v-resize="getMenu">
-    <v-row class="fill-height d-flex flex-row justify-center align-center mx-8">
+  <v-container fluid fill-height>
+    <v-row justify="center" align-content="center">
       <v-col cols="12" lg="5" md="5" sm="10" class="text-center mx-auto">
         <v-form v-model="valid">
-          <v-avatar size="150" v-show="getMenu == true">
+          <v-avatar size="150">
             <img src="@/assets/nerd-amico.png" alt="user" />
           </v-avatar>
           <h2 class="text-subtitle my-5">Enter Academia</h2>
@@ -13,6 +13,7 @@
             counter="11"
             label="Matric Number"
             outlined
+            dense
           />
           <v-text-field
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -23,18 +24,20 @@
             label="Password"
             @click:append="show1 = !show1"
             outlined
+            dense
           />
           <span class="text-caption float-left red--text darken-3 mt-n5"
             >Forgot password?</span
           >
-          <v-row class="d-flex mt-5 flex-row justify-center align-center mx-5">
-            <v-col cols="12" md="7">
-              <v-btn depressed block color="cyan darken-3" dark>Login</v-btn>
-            </v-col>
-          </v-row>
+          <v-btn depressed block color="blue darken-3" class="my-2" dark
+            >Login</v-btn
+          >
+
           <span class="text-subtitle-1">
             Don't have an account?
-            <router-link class="cyan--text darken-3" to="/student/register">Sign up</router-link>
+            <router-link class="blue--text text-darken-3" to="/student/register"
+              ><strong>Sign up</strong></router-link
+            >
           </span>
         </v-form>
       </v-col>
@@ -44,7 +47,7 @@
 
 <script>
 export default {
-  name: "Login",
+  name: "StudentLogin",
 
   data() {
     return {
