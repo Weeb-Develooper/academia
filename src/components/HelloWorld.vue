@@ -9,10 +9,10 @@
         <v-row>
           <v-col cols="12" lg="6" md="6" sm="12" class="mx-auto">
             <v-container class="text-center">
-              <h1 class="display-2 white--text font-weight-regular mt-5">
+              <h1 class="text-h3 white--text font-weight-regular mt-5">
                 Become an
               </h1>
-              <p class="display-4 font-weight-medium blue--text">
+              <p class="text-h2 font-weight-medium blue--text">
                 Academian
               </p>
               <p class="white--text">
