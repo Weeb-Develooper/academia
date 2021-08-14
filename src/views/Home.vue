@@ -10,6 +10,7 @@ import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
   name: "Home",
+  layout: "landing",
   components: {
     HelloWorld,
   },

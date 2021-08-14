@@ -70,7 +70,13 @@
               outlined
               dense
             />
-            <v-btn depressed block color="blue darken-3" class="my-2" dark
+            <v-btn
+              depressed
+              block
+              color="blue darken-3"
+              class="my-2"
+              dark
+              :loading="loading"
               >Register</v-btn
             >
             <span class="text-subtitle-1">
@@ -89,7 +95,7 @@
 <script>
 export default {
   name: "StudentRegister",
-
+  layout: "landing",
   data() {
     return {
       valid: false,

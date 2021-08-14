@@ -1,8 +1,11 @@
 <template>
   <div>
-    <v-app-bar app color="primary" v-resize="method1" elevation="3">
-      <v-app-bar-nav-icon @click="drawer = !drawer"> </v-app-bar-nav-icon>
-
+    <v-app-bar app color="primary" v-resize="method1" elevation="3" dense>
+      <v-app-bar-nav-icon
+        @click="drawer = !drawer"
+        class="d-lg-none d-xl-flex d-xl-none"
+      >
+      </v-app-bar-nav-icon>
       <v-img
         src="@/assets/academia.png"
         class="px-2"
@@ -17,7 +20,7 @@
 
       <v-spacer v-show="$store.state.menu == false"></v-spacer>
 
-      <div class="text-center" v-show="$store.state.menu == false">
+      <div class="text-center d-none d-lg-flex d-xl-none d-xl-flex">
         <v-btn
           text
           plain
@@ -29,19 +32,6 @@
           >{{ list.name }}</v-btn
         >
       </div>
-
-      <v-badge
-        bordered
-        :content="messages"
-        :value="messages"
-        color="error"
-        overlap
-        v-show="$store.state.menu == true"
-      >
-        <v-btn small color="blue" icon>
-          <v-icon> mdi-bell</v-icon>
-        </v-btn>
-      </v-badge>
     </v-app-bar>
     <!-- Nav Drawer -->
     <v-navigation-drawer v-model="drawer" app>
@@ -53,8 +43,8 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-      <v-divider></v-divider>
-      <v-list dense>
+      <v-divider v-if="$store.getters.loggedIn == false"></v-divider>
+      <v-list dense v-if="$store.getters.loggedIn == false">
         <v-list-group
           v-for="item in items"
           :key="item.title"
@@ -93,8 +83,6 @@
 
 <script>
 export default {
-  name: "App",
-
   data: () => ({
     drawer: false,
     group: null,

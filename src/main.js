@@ -18,14 +18,6 @@ Vue.config.productionTip = false;
 new Vue({
     router,
     store,
-    beforeCreate() {
-        let userString = localStorage.getItem("user");
-        let userToken = localStorage.getItem("jwt");
-        if (userString) {
-            this.$store.commit("SET_USER_STATE", JSON.parse(userString));
-            this.$store.commit("SET_USER_TOKEN", userToken);
-        }
-    },
     vuetify,
     render: (h) => h(App),
 }).$mount("#app");

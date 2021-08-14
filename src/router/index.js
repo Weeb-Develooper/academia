@@ -3,8 +3,10 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import StudentLogin from "../views/student/Login.vue";
 import StudentRegister from "../views/student/Register.vue";
-import TeacherLogin from "../views/lecturer/Login.vue";
 import TeacherRegister from "../views/lecturer/Register.vue";
+import TeacherLogin from "../views/lecturer/Login.vue";
+import TeacherDashboard from "../views/lecturer/admin/dashboard.vue";
+import TeacherCourses from "../views/lecturer/admin/courses.vue";
 
 Vue.use(VueRouter);
 
@@ -58,6 +60,22 @@ const routes = [{
         component: TeacherRegister,
         meta: {
             layout: "landing",
+        },
+    },
+    {
+        path: "/teacher/dashboard",
+        name: "TeacherDashboard",
+        component: TeacherDashboard,
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: "/teacher/courses",
+        name: "TeacherCourses",
+        component: TeacherCourses,
+        meta: {
+            requiresAuth: true,
         },
     },
 ];

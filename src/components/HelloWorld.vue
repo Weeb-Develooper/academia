@@ -2,7 +2,7 @@
   <div>
     <v-img
       src="@/assets/620955908.jpg"
-      gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+      gradient="to top right, rgba(100,115,201,.13), rgba(25,32,72,.4)"
       height="400"
     >
       <v-container>
@@ -12,17 +12,17 @@
               <h1 class="text-h3 white--text font-weight-regular mt-5">
                 Become an
               </h1>
-              <p class="text-h2 font-weight-medium blue--text">
+              <p class="text-h2 font-weight-medium blue--text text--darken-3">
                 Academian
               </p>
               <p class="white--text">
                 Take your learning to the next level. Complete courses, take
                 tests and get your scores immediately. Click one of the button
-                below to register as...
+                below to register as a...
               </p>
               <v-btn
                 class="text-capitalize"
-                color="blue darken-3"
+                color="white"
                 to="/student/login"
                 text
                 dark
@@ -62,8 +62,8 @@
             ></v-img>
           </v-col>
           <v-col cols="12" lg="5" md="5" sm="5">
-            <div class="my-12 px-2 mx-9">
-              <h2 class="pt-3 text-h3">Best Features</h2>
+            <div class="my-6">
+              <h2 class="pt-3 text-h4 text-center">Best Features</h2>
               <p class="mt-2 text-subtitle-1">
                 But I must explain to you how all this mistaken idea of
                 denouncing pleasure and praising pain was born and I will give
@@ -109,22 +109,23 @@
         <v-row>
           <v-col cols="12" lg="6" md="6" sm="6" class="mx-auto">
             <div class="text-center white--text">
-              <div class="text-h4 transition-swing mt-12">
-                Search a Department
+              <div class="text-h4 transition-swing mt-6">
+                Find a Department
               </div>
               <div class="text-subtitle-1 transition-swing my-2 mx-2">
                 Enroll today in any course of your choice and get above your
                 peers. Better yourself today and help your career. Better
                 yourself with Academia.
               </div>
-              <div class="mx auto mx-8 mt-6 mb-12">
+              <div class="mx-8 my-3">
                 <v-text-field
-                  label="Search Department"
+                  label="Find a department"
                   append-icon="mdi-magnify"
                   background-color="white"
                   color="grey"
                   single-line
                   outlined
+                  dense
                 ></v-text-field>
               </div>
             </div>
