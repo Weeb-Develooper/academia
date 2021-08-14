@@ -29,7 +29,13 @@
           <span class="text-caption float-left red--text darken-3 mt-n5"
             >Forgot password?</span
           >
-          <v-btn depressed block color="blue darken-3" class="my-2" dark
+          <v-btn
+            depressed
+            block
+            color="blue darken-3"
+            class="my-2"
+            dark
+            :loading="loading"
             >Login</v-btn
           >
 
@@ -48,7 +54,7 @@
 <script>
 export default {
   name: "StudentLogin",
-
+  layout: "landing",
   data() {
     return {
       valid: false,

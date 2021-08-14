@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "@/router";
+import createPersistedState from "vuex-persistedstate";
+import SecureLS from "secure-ls";
+var ls = new SecureLS({ isCompression: false });
 
 Vue.use(Vuex);
 
@@ -23,7 +26,7 @@ export default new Vuex.Store({
         CLEAR_USER_DATA(state) {
             localStorage.clear();
             state.user = null;
-            router.push("/auth/login");
+            router.push("/");
         },
     },
     actions: {
@@ -32,7 +35,7 @@ export default new Vuex.Store({
         },
         logout({ commit }) {
             commit("CLEAR_USER_DATA");
-            router.push("/auth/login");
+            router.push("/");
             return;
         },
     },
@@ -44,4 +47,13 @@ export default new Vuex.Store({
             return !!state.user;
         },
     },
+    plugins: [
+        createPersistedState({
+            storage: {
+                getItem: (key) => ls.get(key),
+                setItem: (key, value) => ls.set(key, value),
+                removeItem: (key) => ls.remove(key),
+            },
+        }),
+    ],
 });
