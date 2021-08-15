@@ -21,7 +21,7 @@
     </div>
 
     <v-row class="mt-2" align="center" justify="center">
-      <v-col cols="12" lg="10">
+      <v-col cols="12">
         <v-simple-table>
           <template v-slot:default>
             <thead>
@@ -38,14 +38,40 @@
                 <th class="text-left">
                   Lecturers
                 </th>
+                <th class="text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, id) in courses" :key="id">
+              <tr v-for="(item, d) in courses" :key="d">
                 <td>{{ item.code }}</td>
                 <td>{{ item.title }}</td>
                 <td>{{ item.units }}</td>
                 <td>{{ item.teachers.length }}</td>
+                <td class="text-right">
+                  <v-menu transition="slide-x-transition" bottom right>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon v-bind="attrs" v-on="on">
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+
+                    <v-list dense>
+                      <v-list-item
+                        link
+                        @click="
+                          setEdit(item.code, item.title, item.units, item.id)
+                        "
+                      >
+                        <v-list-item-title>Edit</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item link @click="remove(item.id)">
+                        <v-list-item-title>Delete</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </td>
               </tr>
             </tbody>
           </template>
@@ -124,6 +150,69 @@
         </v-form>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="editDialog"
+      transition="slide-y-transition"
+      max-width="700"
+    >
+      <v-card>
+        <v-form ref="editcourseform" v-model="valid" lazy-validation>
+          <v-toolbar color="blue darken-1" class="subtitle-1" dark>
+            Edit a Course
+            <v-icon
+              class="ml-auto mx-3"
+              plain
+              :ripple="false"
+              text
+              @click="editDialog = false"
+            >
+              mdi-close
+            </v-icon>
+          </v-toolbar>
+          <v-card-text>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="editTitle"
+                  :rules="formRules"
+                  color="text"
+                  label="Course Title"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="editCode"
+                  :rules="formRules"
+                  color="text"
+                  label="Course Code"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="editUnit"
+                  :rules="formRules"
+                  color="text"
+                  label="Credit Unit"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+                <v-btn
+                  @click="editValidate"
+                  block
+                  :ripple="false"
+                  color="blue"
+                  dark
+                  >Edit</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-form>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -139,10 +228,15 @@ export default {
       valid: true,
       dialog: false,
       courseDialog: false,
+      editDialog: false,
       modalMsg: "",
       code: "",
       title: "",
       unit: "",
+      editCode: "",
+      editTitle: "",
+      editUnit: "",
+      editId: "",
       formRules: [(v) => !!v || "Required field"],
     };
   },
@@ -150,6 +244,11 @@ export default {
     validate() {
       if (this.$refs.courseform.validate()) {
         this.createCourse();
+      }
+    },
+    editValidate() {
+      if (this.$refs.editcourseform.validate()) {
+        this.edit();
       }
     },
     getCourses() {
@@ -196,6 +295,51 @@ export default {
           this.loading = false;
           console.log("An error occurred:", error.response);
         });
+    },
+    edit() {
+      this.modalMsg = "Editing course...";
+      this.dialog = true;
+      this.loading = true;
+      axios
+        .put(`${process.env.VUE_APP_API_BASE_URL}/courses/${this.editId}`, {
+          title: this.editTitle,
+          units: parseInt(this.editUnit),
+          code: this.editCode,
+          department: this.$store.state.user.teacher.department.toString(),
+          teachers: [`${this.$store.state.user.teacher.id.toString()}`],
+        })
+        .then(() => {
+          // Handle success.
+          this.getCourses();
+          this.dialog = false;
+          this.loading = false;
+          this.editDialog = false;
+        })
+        .catch((error) => {
+          // Handle error.
+          this.dialog = false;
+          this.loading = false;
+          console.log("An error occurred:", error.response);
+        });
+    },
+    remove(id) {
+      axios
+        .delete(`${process.env.VUE_APP_API_BASE_URL}/courses/${id}`)
+        .then(() => {
+          // Handle success.
+          this.getCourses();
+        })
+        .catch((error) => {
+          // Handle error.
+          console.log("An error occurred:", error.response);
+        });
+    },
+    setEdit(code, name, unit, id) {
+      this.editCode = code;
+      this.editTitle = name;
+      this.editUnit = unit;
+      this.editId = id;
+      this.editDialog = true;
     },
   },
   mounted() {
