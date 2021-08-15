@@ -85,7 +85,7 @@ export default {
         },
         { title: "Courses", icon: "book-open-line", link: "/teacher/courses" },
         { title: "Lectures", icon: "calendar-line", link: "/dashboard" },
-        { title: "Files", icon: "archive-line", link: "/dashboard" },
+        { title: "Files", icon: "archive-line", link: "/teacher/files" },
         {
           title: "Quiz",
           icon: "question-mark-circle-line",

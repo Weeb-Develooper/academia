@@ -7,6 +7,7 @@ import TeacherRegister from "../views/lecturer/Register.vue";
 import TeacherLogin from "../views/lecturer/Login.vue";
 import TeacherDashboard from "../views/lecturer/admin/dashboard.vue";
 import TeacherCourses from "../views/lecturer/admin/courses.vue";
+import TeacherFiles from "../views/lecturer/admin/files.vue";
 
 Vue.use(VueRouter);
 
@@ -74,6 +75,14 @@ const routes = [{
         path: "/teacher/courses",
         name: "TeacherCourses",
         component: TeacherCourses,
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: "/teacher/files",
+        name: "TeacherFiles",
+        component: TeacherFiles,
         meta: {
             requiresAuth: true,
         },
