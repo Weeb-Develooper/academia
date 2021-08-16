@@ -131,7 +131,6 @@
                   :disable="loading"
                 ></v-select>
                 <v-file-input
-                  v-model="doc"
                   @change="upload"
                   :rules="formRules"
                   color="text"
@@ -168,18 +167,14 @@ export default {
       dialog: false,
       fileDialog: false,
       modalMsg: "",
-      doc: {},
-      editCode: "",
-      editTitle: "",
-      editUnit: "",
-      editId: "",
+      fileRes: "",
       formRules: [(v) => !!v || "Required field"],
     };
   },
   methods: {
     validate() {
       if (this.$refs.fileform.validate()) {
-        this.upload();
+        this.createMaterial();
       }
     },
     getCourses() {
@@ -201,32 +196,50 @@ export default {
           console.log("An error occurred:", error.response);
         });
     },
-    uploadFile() {
+    async upload(e) {
       this.modalMsg = "Uploading file...";
       this.dialog = true;
       this.loading = true;
-      axios
-        .post(`${process.env.VUE_APP_API_BASE_URL}/upload`, this.doc)
-        .then((response) => {
-          // Handle success.
-          console.log(response.data);
-          this.dialog = false;
-          this.loading = false;
-        })
-        .catch((error) => {
-          // Handle error.
-          this.dialog = false;
-          this.loading = false;
-          console.log("An error occurred:", error.response);
-        });
+      const fileData = new FormData();
+      fileData.append("files", e);
+
+      try {
+        const fileResponse = await axios.post(
+          `${process.env.VUE_APP_API_BASE_URL}/upload`,
+          fileData
+        );
+        console.log("fileResponse", fileResponse.data);
+        this.fileRes = fileResponse.data;
+        this.dialog = false;
+        this.loading = false;
+      } catch (e) {
+        console.log(e);
+        this.dialog = false;
+        this.loading = false;
+      }
     },
-    upload() {
-      console.log("files", this.doc);
-      let formData = new FormData();
-
-      formData.append("files", this.doc);
-
-      this.uploadFile();
+    async createMaterial() {
+      this.modalMsg = "Creating material...";
+      this.dialog = true;
+      this.loading = true;
+      try {
+        const materialResponse = await axios.post(
+          `${process.env.VUE_APP_API_BASE_URL}/materials`,
+          {
+            teacher: this.$store.state.user.teacher.id.toString(),
+            course: this.select.id.toString(),
+            file: this.fileRes,
+          }
+        );
+        console.log("materialResponse", materialResponse.data);
+        this.dialog = false;
+        this.loading = false;
+        this.fileDialog = false;
+      } catch (e) {
+        console.log(e);
+        this.dialog = false;
+        this.loading = false;
+      }
     },
     remove(id) {
       axios
@@ -239,13 +252,6 @@ export default {
           // Handle error.
           console.log("An error occurred:", error.response);
         });
-    },
-    setEdit(code, name, unit, id) {
-      this.editCode = code;
-      this.editTitle = name;
-      this.editUnit = unit;
-      this.editId = id;
-      this.editDialog = true;
     },
   },
   mounted() {
