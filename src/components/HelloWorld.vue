@@ -32,7 +32,7 @@
               <v-btn
                 class="ml-3 text-capitalize"
                 color="blue darken-3"
-                to="/lecturer/login"
+                to="/teacher/login"
                 tile
                 depressed
                 dark
