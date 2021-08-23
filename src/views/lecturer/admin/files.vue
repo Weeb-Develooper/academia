@@ -27,16 +27,16 @@
             <thead>
               <tr>
                 <th class="text-left">
-                  Code
+                  Course Code
                 </th>
                 <th class="text-left">
-                  Title
+                  Course Title
                 </th>
                 <th class="text-left">
-                  Unit
+                  Title of File
                 </th>
                 <th class="text-left">
-                  Lecturers
+                  File Type
                 </th>
                 <th class="text-right">
                   Actions
@@ -45,10 +45,10 @@
             </thead>
             <tbody>
               <tr v-for="(item, d) in files" :key="d">
-                <td>{{ item.code }}</td>
-                <td>{{ item.title }}</td>
-                <td>{{ item.units }}</td>
-                <td>{{ item.teachers.length }}</td>
+                <td>{{ item.course.code }}</td>
+                <td>{{ item.course.title }}</td>
+                <td>{{ !item.title ? "NULL" : item.title }}</td>
+                <td>{{ item.file[0].mime }}</td>
                 <td class="text-right">
                   <v-menu transition="slide-x-transition" bottom right>
                     <template v-slot:activator="{ on, attrs }">
@@ -58,13 +58,8 @@
                     </template>
 
                     <v-list dense>
-                      <v-list-item
-                        link
-                        @click="
-                          setEdit(item.code, item.title, item.units, item.id)
-                        "
-                      >
-                        <v-list-item-title>Edit</v-list-item-title>
+                      <v-list-item link :href="item.file[0].url" target="blank">
+                        <v-list-item-title>View</v-list-item-title>
                       </v-list-item>
                       <v-list-item link @click="remove(item.id)">
                         <v-list-item-title>Delete</v-list-item-title>
@@ -130,6 +125,15 @@
                   dense
                   :disable="loading"
                 ></v-select>
+                <v-text-field
+                  v-model="title"
+                  :rules="formRules"
+                  color="text"
+                  label="Title"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
                 <v-file-input
                   @change="upload"
                   :rules="formRules"
@@ -168,6 +172,7 @@ export default {
       fileDialog: false,
       modalMsg: "",
       fileRes: "",
+      title: "",
       formRules: [(v) => !!v || "Required field"],
     };
   },
@@ -177,18 +182,18 @@ export default {
         this.createMaterial();
       }
     },
-    getCourses() {
+    getMaterials() {
       this.loading = true;
       axios
         .get(
           `${
             process.env.VUE_APP_API_BASE_URL
-          }/courses?department=${this.$store.state.user.teacher.department.toString()}`
+          }/materials?teacher=${this.$store.state.user.teacher.id.toString()}`
         )
         .then((response) => {
           // Handle success.
           this.loading = false;
-          this.courses = response.data;
+          this.files = response.data;
         })
         .catch((error) => {
           // Handle error.
@@ -229,8 +234,10 @@ export default {
             teacher: this.$store.state.user.teacher.id.toString(),
             course: this.select.id.toString(),
             file: this.fileRes,
+            title: this.title,
           }
         );
+        this.getMaterials();
         console.log("materialResponse", materialResponse.data);
         this.dialog = false;
         this.loading = false;
@@ -246,15 +253,35 @@ export default {
         .delete(`${process.env.VUE_APP_API_BASE_URL}/courses/${id}`)
         .then(() => {
           // Handle success.
-          this.getCourses();
+          this.getMaterials();
         })
         .catch((error) => {
           // Handle error.
           console.log("An error occurred:", error.response);
         });
     },
+    getCourses() {
+      this.loading = true;
+      axios
+        .get(
+          `${
+            process.env.VUE_APP_API_BASE_URL
+          }/courses?department=${this.$store.state.user.teacher.department.toString()}`
+        )
+        .then((response) => {
+          // Handle success.
+          this.loading = false;
+          this.courses = response.data;
+        })
+        .catch((error) => {
+          // Handle error.
+          this.loading = false;
+          console.log("An error occurred:", error.response);
+        });
+    },
   },
   mounted() {
+    this.getMaterials();
     this.getCourses();
   },
 };
