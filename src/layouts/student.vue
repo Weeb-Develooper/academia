@@ -19,7 +19,7 @@
             
           >
             <v-avatar left>
-              <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+              <v-img src="https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/d07bca98931623.5ee79b6a8fa55.jpg"></v-img>
             </v-avatar>
             <div class="font-weight-medium">Hi, {{$store.state.user.username}}</div>
                   <v-icon right>
@@ -88,15 +88,8 @@ export default {
           icon: "dashboard-line",
           link: "/student/dashboard",
         },
-        { title: "Courses", icon: "book-open-line", link: "/student/courses" },
+        { title: "My Courses", icon: "book-open-line", link: "/student/courses" },
         { title: "Lectures", icon: "calendar-line", link: "/student/lectures" },
-        { title: "Files", icon: "archive-line", link: "/student/files" },
-        {
-          title: "Quiz",
-          icon: "question-mark-circle-line",
-          link: "/dashboard",
-        },
-        { title: "Chat", icon: "chats-line", link: "/dashboard" },
         { title: "Feedbacks", icon: "message-line", link: "/dashboard" },
       ],
       mini: true,
