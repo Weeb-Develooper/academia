@@ -45,8 +45,8 @@
             </thead>
             <tbody>
               <tr v-for="(item, d) in files" :key="d">
-                <td>{{ item.course.code }}</td>
-                <td>{{ item.course.title }}</td>
+                <td>{{ !item.course.code ? 'NULL' : item.course.code }}</td>
+                <td>{{ item.course.title ? 'NULL' : item.course.title }}</td>
                 <td>{{ !item.title ? "NULL" : item.title }}</td>
                 <td>{{ item.file[0].mime }}</td>
                 <td class="text-right">

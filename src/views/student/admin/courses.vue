@@ -224,6 +224,7 @@ import axios from "axios";
 
 export default {
   name: "TeacherCourses",
+  layout: "student",
   data() {
     return {
       courses: [],

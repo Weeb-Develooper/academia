@@ -143,6 +143,7 @@
 <script>
 export default {
   name: "TeacherDashboard",
+  layout: "student",
   data() {
     return {
       courses: [],
