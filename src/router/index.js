@@ -111,7 +111,7 @@ const routes = [{
         },
     },
     {
-        path: "/teacher/lectures",
+        path: "/teacher/lecture/:id",
         name: "TeacherLectures",
         component: TeacherLectures,
         meta: {

@@ -1,4 +1,5 @@
 <script>
+import axios from "axios";
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -12,6 +13,8 @@ export default {
 
   data: function() {
     return {
+      dialog: false,
+      modalMsg: "",
       calendarOptions: {
         plugins: [
           dayGridPlugin,
@@ -32,7 +35,7 @@ export default {
         weekends: true,
         select: this.handleDateSelect,
         eventClick: this.handleEventClick,
-        eventsSet: this.handleEvents,
+        eventsSet: this.currentEvents,
         /* you can update a remote database when these fire:
         eventAdd:
         eventChange:
@@ -54,7 +57,21 @@ export default {
 
       calendarApi.unselect(); // clear date selection
 
-      if (title) {
+            this.modalMsg = "Creating lecture...";
+      this.dialog = true;
+      axios
+        .post(`${process.env.VUE_APP_API_BASE_URL}/events`, {
+          course: this.$route.params.id,
+          end: selectInfo.endStr,
+          start: selectInfo.startStr,
+          eventTitle: title,
+          teacher: this.$store.state.user.teacher.id.toString(),
+        })
+        .then(() => {
+          // Handle success.
+          this.dialog = false;
+          this.courseDialog = false;
+          if (title) {
         calendarApi.addEvent({
           id: createEventId(),
           title,
@@ -63,22 +80,53 @@ export default {
           allDay: selectInfo.allDay,
         });
       }
+        })
+        .catch((error) => {
+          // Handle error.
+          this.dialog = false;
+          this.loading = false;
+          console.log("An error occurred:", error.response);
+        });
     },
 
     handleEventClick(clickInfo) {
       if (
         confirm(
-          `Are you sure you want to delete the event '${clickInfo.event.title}'`
+          `Are you sure you want to delete the lecture '${clickInfo.event.title}'`
         )
       ) {
         clickInfo.event.remove();
       }
     },
 
-    handleEvents(events) {
-      this.currentEvents = events;
+    handleEvents() {
+      return this.currentEvents;
     },
+
+    getEvents() {
+      this.loading = true;
+      axios
+        .get(
+          `${
+            process.env.VUE_APP_API_BASE_URL
+          }/events?teacher=${this.$store.state.user.teacher.id.toString()}`
+        )
+        .then((response) => {
+          // Handle success.
+          this.loading = false;
+          this.currentEvents = response.data;
+        })
+        .catch((error) => {
+          // Handle error.
+          this.loading = false;
+          console.log("An error occurred:", error.response);
+        });
+    }
   },
+
+  mounted() {
+    this.getEvents();
+  }
 };
 </script>
 
@@ -88,9 +136,9 @@ export default {
       <div class="demo-app-sidebar-section">
         <h2>Instructions</h2>
         <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
+          <li>Select dates and you will be prompted to create a new lecture</li>
+          <li>Drag, drop, and resize lectures</li>
+          <li>Click an lecture to delete it</li>
         </ul>
       </div>
       <div class="demo-app-sidebar-section">
@@ -103,10 +151,10 @@ export default {
         ></v-checkbox>
       </div>
       <div class="demo-app-sidebar-section">
-        <h2>All Events ({{ currentEvents.length }})</h2>
+        <h2>All Lectures ({{ currentEvents.length }})</h2>
         <ul>
           <li v-for="event in currentEvents" :key="event.id">
-            <b>{{ event.startStr }}</b>
+            <b>{{ event.start }}</b>
             <i>{{ event.title }}</i>
           </li>
         </ul>
@@ -120,6 +168,18 @@ export default {
         </template>
       </FullCalendar>
     </div>
+    <v-dialog v-model="dialog" hide-overlay persistent width="300">
+      <v-card color="blue darken-1" class="pt-2" dark>
+        <v-card-text>
+          {{ modalMsg }}
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
