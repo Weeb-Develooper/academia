@@ -2,25 +2,23 @@
   <v-container fluid fill-height>
     <v-row justify="center" align-content="center">
       <v-col cols="12" lg="5" md="5" sm="10" class="text-center mx-auto">
-        <v-form v-model="valid">
+        <v-form ref="loginform" v-model="valid" lazy-validation>
           <v-avatar size="150">
             <img src="@/assets/nerd-amico.png" alt="user" />
           </v-avatar>
           <h2 class="text-subtitle my-5">Enter Academia</h2>
           <v-text-field
-            :rules="[rules.required, rules.reg, rules.max]"
+            :rules="emailRules" v-model="email"
             color="text"
-            counter="11"
-            label="Matric Number"
+            label="Email"
             outlined
             dense
           />
           <v-text-field
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show1 ? 'text' : 'password'"
-            :rules="[rules.required, rules.min]"
+            :rules="reqRules" v-model="password"
             color="text"
-            counter="10"
             label="Password"
             @click:append="show1 = !show1"
             outlined
@@ -35,7 +33,7 @@
             color="blue darken-3"
             class="my-2"
             dark
-            :loading="loading"
+            :loading="loading" @click="validate"
             >Login</v-btn
           >
 
@@ -52,20 +50,23 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "StudentLogin",
   layout: "landing",
   data() {
     return {
-      valid: false,
+      valid: true,
       show1: false,
-      rules: {
-        required: (value) => !!value || "Required.",
-        min: (v) => v.length >= 8 || "Min 8 characters",
-        max: (v) => v.length == 11 || "Matric number should be 11 digits!",
-        reg: (val) =>
-          isNaN(val) == false || "Matric number should have only digits!",
-      },
+      loading: false,
+      email: "",
+      password: "",
+      reqRules: [(v) => !!v || "Required field"],
+      emailRules: [
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      ],
     };
   },
   computed: {
@@ -73,6 +74,35 @@ export default {
       return this.$store.getters.getDevice;
     },
   },
+  methods: {
+    validate() {
+      if (this.$refs.loginform.validate()) {
+        this.loginStudent();
+      }
+    },
+    loginStudent() {
+      this.loading = true;
+      axios
+        .post(`${process.env.VUE_APP_API_BASE_URL}/auth/local`, {
+          identifier: this.email,
+          password: this.password,
+        })
+        .then((response) => {
+          // Handle success.
+          this.loading = false;
+          let jwt = response.data.jwt;
+          let user = response.data.user;
+          this.$store.commit("SET_USER_STATE", user);
+          this.$store.commit("SET_USER_TOKEN", jwt);
+          this.$router.push("/student/dashboard");
+        })
+        .catch((error) => {
+          // Handle error.
+          this.loading = false;
+          console.log("An error occurred:", error.response);
+        });
+    }
+  }
 };
 </script>
 
