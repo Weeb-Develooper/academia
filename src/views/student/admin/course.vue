@@ -1,27 +1,27 @@
 <template>
   <v-container fluid fill-height>
-    <div class="text-body-1 font-weight-medium">My Courses</div>
+    <div class="text-body-1 font-weight-regular"><strong>{{course.code}}:</strong> {{course.title.toUpperCase()}}</div>
 
-    <v-row class="my-2" align="center">
-      <v-col v-for="(course, c) in courses" :key="c" cols="12" lg="3" md="6">
-        <v-card class="mx-auto rounded-xl" :to="`/student/courses/${course.id}`" hover>
-            <v-img src="@/assets/3D-3.png" class="white--text">
+    <v-row v-if="course.materials.length > 0" class="my-2">
+      <v-col v-for="(mats, m) in course.materials" :key="m" cols="12" lg="3" md="6">
+        <v-card class="mx-auto rounded-xl" min-height="150" outlined hover>
+            <v-img
+      height="150"
+      :src="mats.file[0].url"
+    ></v-img>
                 <v-card-text style="height: 100%;">
                     <div class="d-flex" style="height: inherit;">
-                        <div class="align-self-end white--text">
-                            <strong>{{course.code}}: {{course.title.toUpperCase()}} </strong>
-                            <div class=""><span
-              class="iconify"
-              data-icon="majesticons:user-circle-line"
-              data-width="20"
-              data-height="20"
-            ></span>{{course.teachers[0].lastName }}</div>  
+                        <div class="align-self-end black--text">
+                            <strong>{{!mats.title ? 'NO TITLE' : mats.title}}</strong>
                         </div>
                     </div>
                 </v-card-text>
-            </v-img>
         </v-card>
       </v-col>
+    </v-row>
+
+    <v-row v-else class="my-2" justify="center" align="center">
+        No materials available for this course yet.
     </v-row>
 
     <v-dialog v-model="dialog" hide-overlay persistent width="300">
@@ -43,30 +43,29 @@
 import axios from "axios";
 
 export default {
-  name: "StudentCourses",
+  name: "StudentCourse",
   layout: "student",
   data() {
     return {
-      courses: [],
-      files: [],
+      course: '',
       dialog: false,
       modalMsg: "",
     };
   },
   methods: {
     getCourses() {
-      this.modalMsg = 'Fetching courses...'
+      this.modalMsg = 'Fetching course contents...'
       this.dialog = true
       axios
         .get(
           `${
             process.env.VUE_APP_API_BASE_URL
-          }/courses?department=${this.$store.state.user.student.department.toString()}`
+          }/courses/${this.$route.params.id}?department=${this.$store.state.user.student.department.toString()}`
         )
         .then((response) => {
           // Handle success.
           this.dialog = false;
-          this.courses = response.data;
+          this.course = response.data;
         })
         .catch((error) => {
           // Handle error.
