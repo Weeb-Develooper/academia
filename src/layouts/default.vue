@@ -85,7 +85,7 @@ export default {
         },
         { title: "Courses", icon: "book-open-line", link: "/teacher/courses" },
         { title: "Files", icon: "archive-line", link: "/teacher/files" },
-        { title: "Feedbacks", icon: "message-line", link: "/dashboard" },
+        { title: "Feedbacks", icon: "message-line", link: "/feedbacks" },
       ],
       mini: true,
     };

@@ -7,12 +7,14 @@ import StudentDashboard from "../views/student/admin/dashboard.vue";
 import StudentCourses from "../views/student/admin/courses.vue";
 import StudentCourse from "../views/student/admin/course.vue";
 import StudentClasses from "../views/student/admin/classes.vue";
+import Feedback from "../views/student/admin/feedback.vue";
 import TeacherRegister from "../views/lecturer/Register.vue";
 import TeacherLogin from "../views/lecturer/Login.vue";
 import TeacherDashboard from "../views/lecturer/admin/dashboard.vue";
 import TeacherCourses from "../views/lecturer/admin/courses.vue";
 import TeacherLectures from "../views/lecturer/admin/lectures.vue";
 import TeacherFiles from "../views/lecturer/admin/files.vue";
+import Feedbacks from "../views/lecturer/admin/feedbacks.vue";
 
 Vue.use(VueRouter);
 
@@ -89,6 +91,15 @@ const routes = [{
         },
     },
     {
+        path: "/feedback",
+        name: "Feedback",
+        component: Feedback,
+        meta: {
+            requiresAuth: true,
+            layout: "student",
+        },
+    },
+    {
         path: "/teacher/login",
         name: "TeacherLogin",
         component: TeacherLogin,
@@ -132,6 +143,14 @@ const routes = [{
         path: "/teacher/files",
         name: "TeacherFiles",
         component: TeacherFiles,
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: "/feedbacks",
+        name: "Feedbacks",
+        component: Feedbacks,
         meta: {
             requiresAuth: true,
         },
