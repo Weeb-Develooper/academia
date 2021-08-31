@@ -345,7 +345,7 @@ export default {
       this.editDialog = true;
     },
     lecture(id) {
-      prompt(`You have fixed a class for ${id}`);
+      this.$router.push(`/teacher/lecture/${id}`);
     },
   },
   mounted() {

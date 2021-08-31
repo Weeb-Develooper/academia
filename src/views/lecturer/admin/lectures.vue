@@ -1,9 +1,10 @@
 <script>
+import axios from "axios";
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { INITIAL_EVENTS, createEventId } from "@/plugins/event-utils";
+// import { INITIAL_EVENTS } from "@/plugins/event-utils";
 
 export default {
   components: {
@@ -12,6 +13,9 @@ export default {
 
   data: function() {
     return {
+      dialog: false,
+      modalMsg: "",
+      meets: ['https://meet.google.com/pso-qexh-dcp', 'https://meet.google.com/xud-exwb-rgq', 'https://meet.google.com/gun-cwoe-bbn', 'https://meet.google.com/smg-ftmr-fih', 'https://meet.google.com/kbm-eyai-riy', 'https://meet.google.com/roe-zvjr-xgy', 'https://meet.google.com/rrj-orjq-btc', 'https://meet.google.com/cvt-vbsx-qhd', 'https://meet.google.com/fkr-rejc-rmi', 'https://meet.google.com/cmi-vfsw-tjy'],
       calendarOptions: {
         plugins: [
           dayGridPlugin,
@@ -24,7 +28,7 @@ export default {
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         },
         initialView: "dayGridMonth",
-        initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+        initialEvents: this.currentEvents, // alternatively, use the `events` setting to fetch from a feed
         editable: true,
         selectable: true,
         selectMirror: true,
@@ -32,7 +36,7 @@ export default {
         weekends: true,
         select: this.handleDateSelect,
         eventClick: this.handleEventClick,
-        eventsSet: this.handleEvents,
+        eventsSet: this.currentEvents,
         /* you can update a remote database when these fire:
         eventAdd:
         eventChange:
@@ -54,31 +58,86 @@ export default {
 
       calendarApi.unselect(); // clear date selection
 
-      if (title) {
-        calendarApi.addEvent({
-          id: createEventId(),
-          title,
-          start: selectInfo.startStr,
+            this.modalMsg = "Creating lecture...";
+      this.dialog = true;
+      axios
+        .post(`${process.env.VUE_APP_API_BASE_URL}/events`, {
+          course: this.$route.params.id,
           end: selectInfo.endStr,
-          allDay: selectInfo.allDay,
+          start: selectInfo.startStr,
+          title: title,
+          teacher: this.$store.state.user.teacher.id.toString(),
+          url: this.randomMeet()
+        })
+        .then(() => {
+          // Handle success.
+          this.dialog = false;
+          this.courseDialog = false;
+          this.getEvents()
+        //   if (title) {
+        // calendarApi.addEvent({
+        //   id: createEventId(),
+        //   title,
+        //   start: selectInfo.startStr,
+        //   end: selectInfo.endStr,
+        //   allDay: selectInfo.allDay,
+        // });
+      // }
+        })
+        .catch((error) => {
+          // Handle error.
+          this.dialog = false;
+          this.loading = false;
+          console.log("An error occurred:", error.response);
         });
-      }
     },
 
     handleEventClick(clickInfo) {
       if (
         confirm(
-          `Are you sure you want to delete the event '${clickInfo.event.title}'`
+          `Are you sure you want to delete the lecture '${clickInfo.event.title}'`
         )
       ) {
         clickInfo.event.remove();
       }
     },
 
-    handleEvents(events) {
-      this.currentEvents = events;
+    handleEvents() {
+      return this.currentEvents;
+    },
+
+    getEvents() {
+      this.loading = true;
+      axios
+        .get(
+          `${
+            process.env.VUE_APP_API_BASE_URL
+          }/events?teacher=${this.$store.state.user.teacher.id.toString()}`
+        )
+        .then((response) => {
+          // Handle success.
+          this.loading = false;
+          this.currentEvents = response.data;
+        })
+        .catch((error) => {
+          // Handle error.
+          this.loading = false;
+          console.log("An error occurred:", error.response);
+        });
+    },
+    randomMeet() {
+      if (this.meets.length > 0) {
+        var meet = this.meets[
+          Math.floor(Math.random() * this.meets.length)
+        ];
+        return meet;
+      }
     },
   },
+
+  mounted() {
+    this.getEvents();
+  }
 };
 </script>
 
@@ -88,9 +147,9 @@ export default {
       <div class="demo-app-sidebar-section">
         <h2>Instructions</h2>
         <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
+          <li>Select dates and you will be prompted to create a new lecture</li>
+          <li>Drag, drop, and resize lectures</li>
+          <li>Click an lecture to delete it</li>
         </ul>
       </div>
       <div class="demo-app-sidebar-section">
@@ -103,11 +162,12 @@ export default {
         ></v-checkbox>
       </div>
       <div class="demo-app-sidebar-section">
-        <h2>All Events ({{ currentEvents.length }})</h2>
+        <h2>All Lectures ({{ currentEvents.length }})</h2>
         <ul>
           <li v-for="event in currentEvents" :key="event.id">
-            <b>{{ event.startStr }}</b>
+            <b>{{ event.start }}</b>
             <i>{{ event.title }}</i>
+            <v-btn small text plain color="blue" :href="event.url" target="_blank">Join meeting</v-btn>
           </li>
         </ul>
       </div>
@@ -120,6 +180,18 @@ export default {
         </template>
       </FullCalendar>
     </div>
+    <v-dialog v-model="dialog" hide-overlay persistent width="300">
+      <v-card color="blue darken-1" class="pt-2" dark>
+        <v-card-text>
+          {{ modalMsg }}
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 

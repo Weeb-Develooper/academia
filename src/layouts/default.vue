@@ -84,7 +84,6 @@ export default {
           link: "/teacher/dashboard",
         },
         { title: "Courses", icon: "book-open-line", link: "/teacher/courses" },
-        { title: "Lectures", icon: "calendar-line", link: "/teacher/lectures" },
         { title: "Files", icon: "archive-line", link: "/teacher/files" },
         {
           title: "Quiz",

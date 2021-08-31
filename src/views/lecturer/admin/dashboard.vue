@@ -125,7 +125,7 @@
             <tbody>
               <tr v-for="item in files" :key="item.name">
                 <td>{{ !item.title ? "NULL" : item.title }}</td>
-                <td>{{ item.course.code }}</td>
+                <td>{{ item.course == null ? 'NULL' : item.course.code }}</td>
                 <td>{{ item.file[0].mime }}</td>
                 <td class="text-right">
                   <v-btn icon :href="item.file[0].url" target="blank">
