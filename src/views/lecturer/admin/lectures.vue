@@ -4,7 +4,7 @@ import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { INITIAL_EVENTS, createEventId } from "@/plugins/event-utils";
+// import { INITIAL_EVENTS } from "@/plugins/event-utils";
 
 export default {
   components: {
@@ -15,6 +15,7 @@ export default {
     return {
       dialog: false,
       modalMsg: "",
+      meets: ['https://meet.google.com/pso-qexh-dcp', 'https://meet.google.com/xud-exwb-rgq', 'https://meet.google.com/gun-cwoe-bbn', 'https://meet.google.com/smg-ftmr-fih', 'https://meet.google.com/kbm-eyai-riy', 'https://meet.google.com/roe-zvjr-xgy', 'https://meet.google.com/rrj-orjq-btc', 'https://meet.google.com/cvt-vbsx-qhd', 'https://meet.google.com/fkr-rejc-rmi', 'https://meet.google.com/cmi-vfsw-tjy'],
       calendarOptions: {
         plugins: [
           dayGridPlugin,
@@ -27,7 +28,7 @@ export default {
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         },
         initialView: "dayGridMonth",
-        initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+        initialEvents: this.currentEvents, // alternatively, use the `events` setting to fetch from a feed
         editable: true,
         selectable: true,
         selectMirror: true,
@@ -64,22 +65,24 @@ export default {
           course: this.$route.params.id,
           end: selectInfo.endStr,
           start: selectInfo.startStr,
-          eventTitle: title,
+          title: title,
           teacher: this.$store.state.user.teacher.id.toString(),
+          url: this.randomMeet()
         })
         .then(() => {
           // Handle success.
           this.dialog = false;
           this.courseDialog = false;
-          if (title) {
-        calendarApi.addEvent({
-          id: createEventId(),
-          title,
-          start: selectInfo.startStr,
-          end: selectInfo.endStr,
-          allDay: selectInfo.allDay,
-        });
-      }
+          this.getEvents()
+        //   if (title) {
+        // calendarApi.addEvent({
+        //   id: createEventId(),
+        //   title,
+        //   start: selectInfo.startStr,
+        //   end: selectInfo.endStr,
+        //   allDay: selectInfo.allDay,
+        // });
+      // }
         })
         .catch((error) => {
           // Handle error.
@@ -121,7 +124,15 @@ export default {
           this.loading = false;
           console.log("An error occurred:", error.response);
         });
-    }
+    },
+    randomMeet() {
+      if (this.meets.length > 0) {
+        var meet = this.meets[
+          Math.floor(Math.random() * this.meets.length)
+        ];
+        return meet;
+      }
+    },
   },
 
   mounted() {
@@ -156,6 +167,7 @@ export default {
           <li v-for="event in currentEvents" :key="event.id">
             <b>{{ event.start }}</b>
             <i>{{ event.title }}</i>
+            <v-btn small text plain color="blue" :href="event.url" target="_blank">Join meeting</v-btn>
           </li>
         </ul>
       </div>

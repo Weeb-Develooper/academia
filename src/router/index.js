@@ -6,6 +6,7 @@ import StudentRegister from "../views/student/Register.vue";
 import StudentDashboard from "../views/student/admin/dashboard.vue";
 import StudentCourses from "../views/student/admin/courses.vue";
 import StudentCourse from "../views/student/admin/course.vue";
+import StudentClasses from "../views/student/admin/classes.vue";
 import TeacherRegister from "../views/lecturer/Register.vue";
 import TeacherLogin from "../views/lecturer/Login.vue";
 import TeacherDashboard from "../views/lecturer/admin/dashboard.vue";
@@ -73,6 +74,15 @@ const routes = [{
         path: "/student/courses/:id",
         name: "StudentCourse",
         component: StudentCourse,
+        meta: {
+            requiresAuth: true,
+            layout: "student",
+        },
+    },
+    {
+        path: "/student/lectures",
+        name: "StudentClasses",
+        component: StudentClasses,
         meta: {
             requiresAuth: true,
             layout: "student",
