@@ -90,7 +90,7 @@ export default {
         },
         { title: "My Courses", icon: "book-open-line", link: "/student/courses" },
         { title: "Lectures", icon: "calendar-line", link: "/student/lectures" },
-        { title: "Feedbacks", icon: "message-line", link: "/dashboard" },
+        { title: "Feedback", icon: "message-line", link: "/feedback" },
       ],
       mini: true,
     };

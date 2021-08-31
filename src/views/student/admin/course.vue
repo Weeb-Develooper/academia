@@ -4,10 +4,10 @@
 
     <v-row v-if="course.materials.length > 0" class="my-2">
       <v-col v-for="(mats, m) in course.materials" :key="m" cols="12" lg="3" md="6">
-        <v-card class="mx-auto rounded-xl" min-height="150" :href="mats.file[0].url" target="_blank" outlined hover>
+        <v-card class="mx-auto" min-height="150" :href="mats.file[0].url" :download="mats.title == null ? 'NULL' : mats.title" elevation="0" hover>
             <v-img
       height="150"
-      :src="mats.file[0].url"
+      src="@/assets/folder.png"
     ></v-img>
                 <v-card-text style="height: 100%;">
                     <div class="d-flex" style="height: inherit;">
